@@ -105,7 +105,12 @@ class snake(object):
                     c.move(c.dirnx, c.dirny)
 
     def reset(self, pos):
-        pass
+        self.head = cube(pos)
+        self.body = []
+        self.body.append(self.head)
+        self.turns = {}
+        self.dirnx = 0
+        self.dirny = 1
 
     def addCube(self):
         # find out where the tail is, and then add another cube there
@@ -121,6 +126,9 @@ class snake(object):
             self.body.append(cube((tail.pos[0], tail.pos[1]-1)))
         elif dx == 0 and dy == -1:
             self.body.append(cube((tail.pos[0], tail.pos[1]+1)))
+
+        self.body[-1].dirnx = dx
+        self.body[-1].dirny = dy
 
     def draw(self, surface):
         for i, c in enumerate(self.body):
@@ -150,6 +158,7 @@ def redrawWindow(surface):
     surface.fill((0, 0, 0))
     s.draw(surface)
     drawGrid(width, rows, surface)
+    snack.draw(surface)
     pygame.display.set_caption("Judith's Snake Game")
     pygame.display.update()
 
@@ -168,8 +177,9 @@ def randomSnack(rows, item):
 
     return (x, y)
 
-# def message_box(subject, content):
-#     pass
+
+def message_box(subject, content):
+    pass
 
 
 def main():
@@ -194,6 +204,13 @@ def main():
         if s.body[0].pos == snack.pos:
             s.addCube()
             snack = cube(randomSnack(rows, s), color=(0, 255, 0))
+
+        for x in range(len(s.body)):
+            if s.body[x].pos in list(map(lambda z: z.pos, s.body[x+1:])):
+                print('Score: ', len(s.body))
+                message_box('You Lost!', 'Play again...')
+                s.reset((10, 10))
+                break
 
         redrawWindow(win)
 
