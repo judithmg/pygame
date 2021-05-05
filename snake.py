@@ -113,7 +113,7 @@ class snake(object):
         tail = self.body[-1]
         dx, dy = tail.dirnx, tail.dirny
 
-                if dx == 1 and dy == 0:
+        if dx == 1 and dy == 0:
             self.body.append(cube((tail.pos[0]-1, tail.pos[1])))
         elif dx == -1 and dy == 0:
             self.body.append(cube((tail.pos[0]+1, tail.pos[1])))
@@ -191,10 +191,9 @@ def main():
         s.move()
 
         # check if we hit the cube
-        if s.body[0].pos==snack.pos:
+        if s.body[0].pos == snack.pos:
             s.addCube()
-            snack=cube(randomSnack(rows, s),color=(0,255,0))
-            
+            snack = cube(randomSnack(rows, s), color=(0, 255, 0))
 
         redrawWindow(win)
 
