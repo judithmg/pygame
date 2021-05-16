@@ -179,7 +179,15 @@ def randomSnack(rows, item):
 
 
 def message_box(subject, content):
-    pass
+    # we create a window that'll be on top of everything, it'll show info given whatever subject we give it
+    root = tk.Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    messagebox.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
 
 
 def main():
