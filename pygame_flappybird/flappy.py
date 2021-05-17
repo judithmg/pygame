@@ -32,12 +32,14 @@ def draw_pipes(pipes):
 
 
 def check_collision(pipes):
-    global can_score
+    global can_score, death_sound
     for pipe in pipes:
         if bird_rect.colliderect(pipe):
             can_score = True
+            death_sound.play()
             return False
     if bird_rect.top <= -100 or bird_rect.bottom >= 900:
+        death_sound.play()
         can_score = True
         return False
     return True
@@ -82,12 +84,13 @@ def update_score(score, high_score):
 
 
 def pipe_score_check():
-    global score, can_score
+    global score, can_score, score_sound
 
     if pipe_list:
         for pipe in pipe_list:
             if 95 < pipe.centerx < 105 and can_score:
                 score += 1
+                score_sound.play()
                 can_score = False
             if pipe.centerx < 0:
                 can_score = True
@@ -141,6 +144,11 @@ pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 
+# Sound
+flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
+death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
+score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+
 while True:
     # pygame looks for any event that is happening such as mouse movement, key presses...
     for event in pygame.event.get():
@@ -151,6 +159,7 @@ while True:
             if event.key == pygame.K_SPACE and game_active:
                 bird_movement = 0
                 bird_movement -= 10
+                flap_sound.play()
             if event.key == pygame.K_SPACE and game_active == False:
                 game_active = True
                 pipe_list.clear()
